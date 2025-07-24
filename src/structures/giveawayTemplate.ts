@@ -27,14 +27,19 @@ export function replaceGiveawayKeys(
     giveawayObject: Record<string, any>,
     winners: string[] = []
 ): string {
-    for (const key in giveawayTemplate) {
+    try{
+        for (const key in giveawayTemplate) {
         input = input?.replaceAll(
             `{${key}}`,
             key == 'numberOfWinners'
                 ? winners?.length
                 : key == 'winnersString' ? winners?.join(', ') : giveawayObject[key]
         )
+        }
+    }catch{
+
     }
+    
 
     return input
 }

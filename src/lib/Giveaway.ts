@@ -425,7 +425,7 @@ export class Giveaway<
         this._giveaways.database.pull(`${this.guild.id}.giveaways`, giveawayIndex, this.raw)
 
         message.edit({
-            content: startEmbedStrings?.messageContent,
+            content: "",
             embeds: TypedObject.keys(startEmbedStrings).length == 1
                 && startEmbedStrings?.messageContent ? [] : [embed],
             components: [buttonsRow]
@@ -504,7 +504,7 @@ export class Giveaway<
         this._giveaways.database.pull(`${this.guild.id}.giveaways`, giveawayIndex, this.raw)
 
         message.edit({
-            content: startEmbedStrings?.messageContent,
+            content: "",
             embeds: TypedObject.keys(startEmbedStrings).length == 1
                 && startEmbedStrings?.messageContent ? [] : [embed],
             components: [buttonsRow]
@@ -586,7 +586,7 @@ export class Giveaway<
         this._giveaways.database.pull(`${this.guild.id}.giveaways`, giveawayIndex, this.raw)
 
         message.edit({
-            content: startEmbedStrings?.messageContent,
+            content: "",
             embeds: TypedObject.keys(startEmbedStrings).length == 1
                 && startEmbedStrings?.messageContent ? [] : [embed],
             components: [buttonsRow]
@@ -650,7 +650,7 @@ export class Giveaway<
         this.raw.endedTimestamp = endedTimestamp
 
         this._giveaways.database.pull(`${this.guild.id}.giveaways`, giveawayIndex, this.raw)
-
+        
         this._messageUtils.editFinishGiveawayMessage(
             this.raw,
             winnersIDs,
@@ -1149,7 +1149,7 @@ export class Giveaway<
         this._giveaways.database.pull(`${this.guild.id}.giveaways`, giveawayIndex, this.raw)
 
         message.edit({
-            content: startEmbedStrings?.messageContent,
+            content: "",
             embeds: TypedObject.keys(startEmbedStrings).length == 1
                 && startEmbedStrings?.messageContent ? [] : [embed],
             components: [buttonsRow]

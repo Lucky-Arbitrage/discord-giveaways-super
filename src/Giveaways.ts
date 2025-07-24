@@ -574,73 +574,7 @@ export class Giveaways<
                 }
 
                 if (interaction.customId == 'rerollButton') {
-                    const guildGiveaways = this.getGuildGiveaways(interactionMessage.guild!.id)
-                    const giveaway = guildGiveaways.find(giveaway => giveaway.messageID == interactionMessage.id)
-
-                    const rerollEmbedStrings = giveaway?.messageProps?.embeds?.reroll
-
-                    if (giveaway) {
-                        if (interaction.user.id !== giveaway?.host.id) {
-                            const onlyHostCanReroll = rerollEmbedStrings?.onlyHostCanReroll || {}
-                            const rerollErroredMessageContent = onlyHostCanReroll?.messageContent
-
-                            const errorEmbed = this._messageUtils.buildGiveawayEmbed(
-                                giveaway.raw,
-                                onlyHostCanReroll
-                            )
-
-                            interaction.reply({
-                                content: rerollErroredMessageContent,
-                                embeds: TypedObject.keys(
-                                    onlyHostCanReroll
-                                ).length == 1 && rerollErroredMessageContent ? [] : [errorEmbed],
-                                ephemeral: true
-                            }).catch((err: Error) => {
-                                // catching the "unknown interaction" error
-                                // while still sending the responce on the button click somehow
-
-                                if (!err.message.toLowerCase().includes('interaction')) {
-                                    throw new GiveawaysError(
-                                        'Cannot reply to the button: ' + err,
-                                        GiveawaysErrorCodes.UNKNOWN_ERROR
-                                    )
-                                }
-                            })
-                        } else {
-                            const rerollSuccess = rerollEmbedStrings?.successMessage || {}
-                            const rerollSuccessfulMessageCreate = rerollSuccess?.messageContent
-
-                            giveaway.reroll()
-
-                            const successEmbed = this._messageUtils.buildGiveawayEmbed(
-                                giveaway.raw,
-                                rerollSuccess
-                            )
-
-                            interaction.reply({
-                                content: rerollSuccessfulMessageCreate,
-                                embeds: TypedObject.keys(
-                                    rerollSuccess
-                                ).length == 1 && rerollSuccessfulMessageCreate ? [] : [successEmbed],
-                                ephemeral: true
-                            }).catch((err: Error) => {
-                                // catching the "unknown interaction" error
-                                // while still sending the responce on the button click somehow
-
-                                if (!err.message.toLowerCase().includes('interaction')) {
-                                    throw new GiveawaysError(
-                                        'Cannot reroll the winners: ' + err,
-                                        GiveawaysErrorCodes.UNKNOWN_ERROR
-                                    )
-                                }
-                            })
-                        }
-                    } else {
-                        throw new GiveawaysError(
-                            'Cannot reroll the winners: ' + errorMessages.UNKNOWN_GIVEAWAY(interactionMessage.id),
-                            GiveawaysErrorCodes.UNKNOWN_GIVEAWAY
-                        )
-                    }
+                    interaction.deferUpdate().catch(() => {}); // silently ignore errors
                 }
             }
         })
@@ -841,7 +775,9 @@ export class Giveaways<
             newGiveaway.participantsFilter
         ) : {}
 
+
         const startEmbedStrings = definedEmbedStrings?.start || {}
+    
 
         const finish = definedEmbedStrings?.finish
         const reroll = definedEmbedStrings?.reroll
@@ -859,7 +795,7 @@ export class Giveaways<
         ]
 
         const message = await channel.send({
-            content: startEmbedStrings?.messageContent,
+            content: "",
             embeds: TypedObject.keys(startEmbedStrings).length == 1 && startEmbedStrings?.messageContent ? [] : [giveawayEmbed],
             components: [buttonsRow]
         })

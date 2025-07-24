@@ -91,7 +91,7 @@ export class MessageUtils {
                 description || `**${giveaway.prize}** giveaway has started with **${giveaway.entriesCount}** entries! ` +
                 'Press the button below to join!'
             )
-            .setColor(color || '#d694ff')
+            .setColor('#2fb74f')
             .setImage(imageURL || null)
             .setThumbnail(thumbnailURL || null)
             .setFooter({
@@ -238,7 +238,7 @@ export class MessageUtils {
         const message = await channel.messages.fetch(giveaway.messageID)
 
         await message.edit({
-            content: embedStrings?.messageContent,
+            content: "",
             embeds: TypedObject.keys(embedStrings).length == 1 &&
                 embedStrings?.messageContent
                 ? [] : [embed],
@@ -272,14 +272,14 @@ export class MessageUtils {
 
         const finishDefaultedEmbedStrings: Partial<IGiveawayEmbedOptions> = {
             ...finishEmbedStrings,
-            color: finishEmbedStrings?.color || '#d694ff',
+            color: '#2fb74f',
             description: finishEmbedStrings?.description || 'Giveaway is over!'
         }
 
         const noWinnersDefaultedEmbedStrings: Partial<IGiveawayEmbedOptions> = {
             ...finishEmbedStrings,
 
-            color: noWinnersEmbedStrings?.color || '#d694ff',
+            color: '#2fb74f',
             description: noWinnersEmbedStrings?.description || 'There are no winners in this giveaway!'
         }
 
@@ -322,14 +322,14 @@ export class MessageUtils {
             : TypedObject.keys(embedStrings?.noWinnersEndMessage)
 
         await message.edit({
-            content: giveawayMessageContent,
+            content: "",
             embeds: TypedObject.keys(defaultedEmbedStrings).length == 1 && giveawayMessageContent ? [] : [finishEmbed],
-            components: winnersCondition ? [rerollButtonRow] : []
+            components: winnersCondition ? [] : []
         })
 
         if (sendWinnersMessage) {
             await message.reply({
-                content: finishMessageContent,
+                content: "",
                 embeds: finishInputObjectKeys.length == 1 && finishMessageContent ? [] : [giveawayEndEmbed],
                 components: [goToMessageButtonRow]
             })
