@@ -1,6 +1,6 @@
 {
   "name": "@jsewell/discord-giveaways-super",
-  "version": "1.0.9",
+  "version": "1.1.1",
   "description": "Fork of discord giveaways super for LA",
   "types": "./types/src/index.d.ts",
   "main": "dist/src/index.js",
@@ -23,7 +23,6 @@
   "license": "MIT",
   "dependencies": {
 		"discord.js": "^14.16.3",
-		"enmap": "^5.9.8",
 		"quick-mongo-super": "^1.0.19"
 	},
 	"devDependencies": {

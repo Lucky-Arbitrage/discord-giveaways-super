@@ -3,9 +3,6 @@
 		"includePattern": ".+\\.ts?$",
 		"excludePattern": ".+\\.(test|spec).ts"
 	},
-	"plugins": [
-		"node_modules/jsdoc-babel"
-	],
 	"babel": {
 		"extensions": [
 			"ts"
