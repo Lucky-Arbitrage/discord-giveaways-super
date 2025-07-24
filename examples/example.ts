@@ -1,4 +1,6 @@
+// eslint-disable-next-line import/no-unresolved
 import { ButtonStyle, ChannelType, Client, Partials } from 'discord.js'
+// @ts-ignore
 import { DatabaseType, Giveaways, isTimeStringValid } from 'discord-giveaways-super'
 
 const { Channel, GuildMember, Message, User } = Partials

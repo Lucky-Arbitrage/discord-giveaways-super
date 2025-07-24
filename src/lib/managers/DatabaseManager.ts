@@ -193,14 +193,6 @@ export class DatabaseManager<TDatabaseType extends DatabaseType, TKey extends st
     }
 
     /**
-     * [TYPE GUARD FUNCTION] - Determines if the databse type is Enmap.
-     * @returns {boolean} Whether the database type is Enmap.
-     */
-    public isEnmap(): this is DatabaseManager<DatabaseType.ENMAP, TKey, TValue> {
-        return this.giveaways.options.database == DatabaseType.ENMAP
-    }
-
-    /**
      * Gets the object keys in database root or in object by specified key.
      * @param {TKey} [key] The key in database. Omitting this argument will get the keys from the root of database.
      * @returns {string[]} Database object keys array.
@@ -245,11 +237,6 @@ export class DatabaseManager<TDatabaseType extends DatabaseType, TKey extends st
         if (this.isMongoDB()) {
             const data = await this.db.get<V>(key)
             return data
-        }
-
-        if (this.isEnmap()) {
-            const data = this.db.get(key)
-            return data as any
         }
 
         return {} as V
@@ -325,13 +312,6 @@ export class DatabaseManager<TDatabaseType extends DatabaseType, TKey extends st
                 return data as any
             }
 
-            if (this.isEnmap()) {
-                this.db.set(key, value as any)
-
-                const data = this.db.get(key)
-                return data as any
-            }
-
             return {} as R
         }, sendDebugLog)
     }
@@ -356,11 +336,6 @@ export class DatabaseManager<TDatabaseType extends DatabaseType, TKey extends st
 
         if (this.isMongoDB()) {
             await this.db.clear()
-            return true
-        }
-
-        if (this.isEnmap()) {
-            this.db.deleteAll()
             return true
         }
 
@@ -423,20 +398,6 @@ export class DatabaseManager<TDatabaseType extends DatabaseType, TKey extends st
                 return true
             }
 
-            if (this.isEnmap()) {
-                const targetNumber = this.db.get(key) as any as number
-
-                if (isNaN(targetNumber)) {
-                    throw new GiveawaysError(
-                        errorMessages.INVALID_TARGET_TYPE('number', targetNumber),
-                        GiveawaysErrorCodes.INVALID_TARGET_TYPE
-                    )
-                }
-
-                this.db.set(key, targetNumber + numberToAdd as any)
-                return true
-            }
-
             return false
         })
     }
@@ -483,20 +444,6 @@ export class DatabaseManager<TDatabaseType extends DatabaseType, TKey extends st
                 return true
             }
 
-            if (this.isEnmap()) {
-                const targetNumber = this.db.get(key) as any as number
-
-                if (isNaN(targetNumber)) {
-                    throw new GiveawaysError(
-                        errorMessages.INVALID_TARGET_TYPE('number', targetNumber),
-                        GiveawaysErrorCodes.INVALID_TARGET_TYPE
-                    )
-                }
-
-                this.db.set(key, targetNumber - numberToSubtract as any)
-                return true
-            }
-
             return false
         })
     }
@@ -517,11 +464,6 @@ export class DatabaseManager<TDatabaseType extends DatabaseType, TKey extends st
 
             if (this.isMongoDB()) {
                 await this.db.delete(key)
-                return true
-            }
-
-            if (this.isEnmap()) {
-                this.db.delete(key)
                 return true
             }
 
@@ -579,22 +521,6 @@ export class DatabaseManager<TDatabaseType extends DatabaseType, TKey extends st
 
                 targetArray.push(value)
                 await this.db.set(key, targetArray)
-
-                return true
-            }
-
-            if (this.isEnmap()) {
-                const targetArray = (this.db.get(key) || []) as any[]
-
-                if (!Array.isArray(targetArray)) {
-                    throw new GiveawaysError(
-                        errorMessages.INVALID_TARGET_TYPE('array', targetArray),
-                        GiveawaysErrorCodes.INVALID_TARGET_TYPE
-                    )
-                }
-
-                targetArray.push(value)
-                this.db.set(key, targetArray as any)
 
                 return true
             }
@@ -659,22 +585,6 @@ export class DatabaseManager<TDatabaseType extends DatabaseType, TKey extends st
                 return true
             }
 
-            if (this.isEnmap()) {
-                const targetArray = (this.db.get(key) || []) as any[]
-
-                if (!Array.isArray(targetArray)) {
-                    throw new GiveawaysError(
-                        errorMessages.INVALID_TARGET_TYPE('array', targetArray),
-                        GiveawaysErrorCodes.INVALID_TARGET_TYPE
-                    )
-                }
-
-                targetArray.splice(index, 1, newValue)
-                this.db.set(key, targetArray as any)
-
-                return true
-            }
-
             return false
         })
     }
@@ -727,22 +637,6 @@ export class DatabaseManager<TDatabaseType extends DatabaseType, TKey extends st
                 return true
             }
 
-            if (this.isEnmap()) {
-                const targetArray = this.db.get(key) || []
-
-                if (!Array.isArray(targetArray)) {
-                    throw new GiveawaysError(
-                        errorMessages.INVALID_TARGET_TYPE('array', targetArray),
-                        GiveawaysErrorCodes.INVALID_TARGET_TYPE
-                    )
-                }
-
-                targetArray.splice(index, 1)
-                this.db.set(key, targetArray as any)
-
-                return true
-            }
-
             return false
         })
     }
@@ -784,31 +678,6 @@ export class DatabaseManager<TDatabaseType extends DatabaseType, TKey extends st
         if (this.isMongoDB()) {
             const data = await this.db.all<V>()
             return data
-        }
-
-        if (this.isEnmap()) {
-            const allData: Record<string, any> = {}
-
-            for (const databaseKey of this.db.keys()) {
-                const keys = databaseKey.split('.')
-                let currentObject = allData
-
-                for (let i = 0; i < keys.length; i++) {
-                    const currentKey = keys[i]
-
-                    if (keys.length - 1 === i) {
-                        currentObject[currentKey] = this.db.get(databaseKey) || null
-                    } else {
-                        if (!currentObject[currentKey]) {
-                            currentObject[currentKey] = {}
-                        }
-
-                        currentObject = currentObject[currentKey]
-                    }
-                }
-            }
-
-            return allData as V
         }
 
         return {} as V

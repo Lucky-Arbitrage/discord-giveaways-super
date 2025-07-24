@@ -1,7 +1,6 @@
 import { ButtonStyle, ColorResolvable, User } from 'discord.js'
 
 import { Mongo, IMongoConnectionOptions } from 'quick-mongo-super/MongoItems'
-import Enmap, { EnmapOptions } from 'enmap'
 
 import { DatabaseType } from './databaseType.enum'
 import { IDatabaseStructure } from './databaseStructure.interface'
@@ -606,12 +605,10 @@ export type IGiveawayEmbedOptions = Partial<
  * determine which connection configuration should be used.
  *
  * @typedef {(
- * Partial<IJSONDatabaseConfiguration> | EnmapOptions<any, any> | IMongoConnectionOptions
+ * Partial<IJSONDatabaseConfiguration> | IMongoConnectionOptions
  * )} DatabaseConnectionOptions<TDatabaseType>
  *
  * @see Partial<IJSONDatabaseConfiguration> - JSON configuration.
- *
- * @see EnmapOptions<any, any> - Enmap configuration.
  *
  * @see IMongoConnectionOptions - MongoDB connection configuration.
  *
@@ -620,7 +617,6 @@ export type IGiveawayEmbedOptions = Partial<
  */
 export type DatabaseConnectionOptions<TDatabaseType extends DatabaseType> =
     TDatabaseType extends DatabaseType.JSON ? Partial<IJSONDatabaseConfiguration> :
-    TDatabaseType extends DatabaseType.ENMAP ? EnmapOptions<any, any> :
     TDatabaseType extends DatabaseType.MONGODB ? IMongoConnectionOptions : never
 
 /**
@@ -635,13 +631,11 @@ export type DatabaseConnectionOptions<TDatabaseType extends DatabaseType> =
  * - `TValue` ({@link any}) - The type of database values that will be used
  *
  * @typedef {(
- * null | Enmap<string, IDatabaseStructure> | Mongo<IDatabaseStructure>
+ * null | Mongo<IDatabaseStructure>
  * )} Database<TDatabaseType>
  *
  * @see null - JSON database management object - `null`
  * is because it's not an external database - JSON is being parsed by the module itself.
- *
- * @see Enmap<string, IDatabaseStructure> - Enmap database.
  *
  * @see Mongo<IDatabaseStructure> - MongoDB database.
  *
@@ -656,5 +650,4 @@ export type Database<
     TValue = IDatabaseStructure
 > =
     TDatabaseType extends DatabaseType.JSON ? null :
-    TDatabaseType extends DatabaseType.ENMAP ? Enmap<TKey, TValue> :
     TDatabaseType extends DatabaseType.MONGODB ? Mongo<TKey, TValue, false> : never

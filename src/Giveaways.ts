@@ -2,7 +2,6 @@ import { existsSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
 
 import QuickMongo from 'quick-mongo-super'
-import Enmap from 'enmap'
 
 import {
     Client, GatewayIntentBits,
@@ -331,16 +330,6 @@ export class Giveaways<
 
                 this.db = mongo as Database<TDatabaseType, TDatabaseKey, TDatabaseValue>
                 this.logger.debug(`MongoDB connection established in ${Date.now() - connectionStartDate}ms`, 'lightgreen')
-
-                this.emit('databaseConnect')
-                break
-            }
-
-            case DatabaseType.ENMAP: {
-                this.logger.debug('Initializing Enmap...')
-
-                const databaseOptions = this.options.connection as DatabaseConnectionOptions<DatabaseType.ENMAP>
-                this.db = new Enmap(databaseOptions) as Database<TDatabaseType, TDatabaseKey, TDatabaseValue>
 
                 this.emit('databaseConnect')
                 break
