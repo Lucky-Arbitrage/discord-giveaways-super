@@ -19,6 +19,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm ci
+      - name: Build NPM
+        run: npm run build
       - name: Extract version from package.json
         uses: sergeysova/jq-action@v2
         id: version
