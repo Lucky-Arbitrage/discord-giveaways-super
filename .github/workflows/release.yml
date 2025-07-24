@@ -1,7 +1,7 @@
-name: Build
+name: Release
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -29,3 +29,8 @@ jobs:
       - name: Get latest tag
         uses: actions-ecosystem/action-get-latest-tag@v1
         id: get-latest-tag
+      - name: Publish to NPM
+        if: ${{ contains(steps.get-latest-tag.outputs.tag, steps.version.outputs.value) == false }}
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
