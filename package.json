@@ -10,7 +10,7 @@
 "files": [
   "dist",
   "types"
-]
+],
 "scripts": {
 		"prep": "npx husky install && npm run commitlint:install",
 		"lint": "bash scripts/lint.sh",
