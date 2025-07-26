@@ -419,7 +419,7 @@ export class Giveaway<
         const startEmbedStrings = strings?.embeds.start || {}
 
         const embed = this._messageUtils.buildGiveawayEmbed(this.raw, startEmbedStrings)
-        const buttonsRow = this._messageUtils.buildButtonsRow(strings?.buttons.joinGiveawayButton || {})
+        const buttonsRow = this._messageUtils.buildButtonsRow(strings?.buttons.joinGiveawayButton || {}, this.entriesCount)
 
         const message = await this.channel.messages.fetch(this.messageID)
         this._giveaways.database.pull(`${this.guild.id}.giveaways`, giveawayIndex, this.raw)
@@ -498,7 +498,7 @@ export class Giveaway<
         const startEmbedStrings = strings?.embeds.start || {}
 
         const embed = this._messageUtils.buildGiveawayEmbed(this.raw, startEmbedStrings)
-        const buttonsRow = this._messageUtils.buildButtonsRow(strings?.buttons.joinGiveawayButton || {})
+        const buttonsRow = this._messageUtils.buildButtonsRow(strings?.buttons.joinGiveawayButton || {}, this.entriesCount)
 
         const message = await this.channel.messages.fetch(this.messageID)
         this._giveaways.database.pull(`${this.guild.id}.giveaways`, giveawayIndex, this.raw)
@@ -580,7 +580,7 @@ export class Giveaway<
         const startEmbedStrings = strings?.embeds.start || {}
 
         const embed = this._messageUtils.buildGiveawayEmbed(this.raw, startEmbedStrings)
-        const buttonsRow = this._messageUtils.buildButtonsRow(strings?.buttons.joinGiveawayButton || {})
+        const buttonsRow = this._messageUtils.buildButtonsRow(strings?.buttons.joinGiveawayButton || {}, this.entriesCount)
 
         const message = await this.channel.messages.fetch(this.messageID)
         this._giveaways.database.pull(`${this.guild.id}.giveaways`, giveawayIndex, this.raw)
@@ -1143,7 +1143,7 @@ export class Giveaway<
         }
 
         const embed = this._messageUtils.buildGiveawayEmbed(this.raw, startEmbedStrings)
-        const buttonsRow = this._messageUtils.buildButtonsRow(strings?.buttons.joinGiveawayButton || {})
+        const buttonsRow = this._messageUtils.buildButtonsRow(strings?.buttons.joinGiveawayButton || {}, this.entriesCount)
 
         const message = await this.channel.messages.fetch(this.messageID)
         this._giveaways.database.pull(`${this.guild.id}.giveaways`, giveawayIndex, this.raw)

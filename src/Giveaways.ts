@@ -258,7 +258,13 @@ export class Giveaways<
             GatewayIntentBits.GuildMessageReactions
         ]
 
-        const clientIntents = new IntentsBitField(this.client.options.intents)
+        // console.log('DEBUG: client.options.intents =', this.client.options.intents);
+        const intents = this.client.options.intents;
+        // const bitfield = intents instanceof IntentsBitField ? intents.bitfield : intents;
+        // console.log('DEBUG: intents =', intents);
+        // console.log('DEBUG: bitfield =', bitfield, 'type:', typeof bitfield);
+        // console.log('DEBUG: intents.bitfield =', intents.bitfield, 'type:', typeof intents.bitfield);
+        const clientIntents = new IntentsBitField(intents.bitfield);
 
         for (const requiredIntent of requiredIntents) {
             if (!clientIntents.has(requiredIntent)) {
@@ -775,7 +781,7 @@ export class Giveaways<
         const channel = this.client.channels.cache.get(channelID) as TextChannel
 
         const giveawayEmbed = this._messageUtils.buildGiveawayEmbed(newGiveaway, startEmbedStrings)
-        const buttonsRow = this._messageUtils.buildButtonsRow(joinGiveawayButton)
+        const buttonsRow = this._messageUtils.buildButtonsRow(joinGiveawayButton, newGiveaway.entriesCount)
 
         const [finishEmbedStrings, rerollEmbedStrings, restrictionsMessagesStrings] = [
             finish ? finish('{winnersString}', winnersCount!) : {},

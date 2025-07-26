@@ -11,6 +11,8 @@ import { replaceGiveawayKeys } from '../../../structures/giveawayTemplate'
 import { Giveaways } from '../../../Giveaways'
 import { TypedObject } from './TypedObject'
 
+// console.log('MessageUtils loaded');
+
 /**
  * Message utils class.
  */
@@ -117,23 +119,28 @@ export class MessageUtils {
     /**
      * Creates a buttons row based on the specified "join giveaway" button object.
      * @param {IGiveawayButtonOptions} joinGiveawayButton String values object to use in the button.
+     * @param {number} [entriesCount] Optional number of entries to display on the button.
      * @returns {ActionRowBuilder<ButtonBuilder>} Generated buttons row.
      */
-    public buildButtonsRow(joinGiveawayButton: IGiveawayButtonOptions): ActionRowBuilder<ButtonBuilder> {
+    public buildButtonsRow(joinGiveawayButton: IGiveawayButtonOptions, entriesCount?: number): ActionRowBuilder<ButtonBuilder> {
+        // console.log('buildButtonsRow called with:', { joinGiveawayButton, entriesCount });
         const joinGiveawayButtonBuilder = new ButtonBuilder({
             customId: 'joinGiveawayButton',
             emoji: joinGiveawayButton?.emoji || '🎉',
             style: joinGiveawayButton?.style || ButtonStyle.Primary
         })
 
-        if (joinGiveawayButton?.text !== null) {
-            joinGiveawayButtonBuilder.setLabel(joinGiveawayButton?.text || 'Join the giveaway')
+        let label = joinGiveawayButton?.text || 'Join the giveaway';
+        if (typeof entriesCount === 'number') {
+            label += ` (${entriesCount} entr${entriesCount === 1 ? 'y' : 'ies'})`;
         }
+        // console.log('Button label:', label);
+        joinGiveawayButtonBuilder.setLabel(label);
 
         const buttonsRow = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(joinGiveawayButtonBuilder)
 
-        return buttonsRow
+        return buttonsRow;
     }
 
     /**
@@ -232,7 +239,8 @@ export class MessageUtils {
         const embed = this.buildGiveawayEmbed(giveaway)
 
         const buttonsRow = this.buildButtonsRow(
-            giveaway.messageProps?.buttons.joinGiveawayButton as IGiveawayButtonOptions
+            giveaway.messageProps?.buttons.joinGiveawayButton as IGiveawayButtonOptions,
+            giveaway.entriesCount
         )
 
         const message = await channel.messages.fetch(giveaway.messageID)
